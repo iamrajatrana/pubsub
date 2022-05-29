@@ -3,27 +3,27 @@ package core;
 public class SubscriberWorker implements Runnable {
 
     private final Topic topic;
-    private final TopicSubscriber topicSubscriber;
+    private final SubscriberMetadata subscriberMetadata;
     private boolean running = true;
 
-    public SubscriberWorker(Topic topic, TopicSubscriber topicSubscriber) {
+    public SubscriberWorker(Topic topic, SubscriberMetadata subscriberMetadata) {
         this.topic = topic;
-        this.topicSubscriber = topicSubscriber;
+        this.subscriberMetadata = subscriberMetadata;
     }
 
     @Override
     public void run() {
 
         while (running) {
-            synchronized (topicSubscriber) {
-                int currentOffset = topicSubscriber.getOffset().get();
+            synchronized (subscriberMetadata) {
+                int currentOffset = subscriberMetadata.getOffset().get();
 
                 try {
                     while (currentOffset >= topic.getMessages().size()) {
-                        topicSubscriber.wait();
+                        subscriberMetadata.wait();
                     }
-                    topicSubscriber.getSubscriber().consume(topic.getMessages().get(currentOffset));
-                    topicSubscriber.getOffset().compareAndSet(currentOffset, currentOffset + 1);
+                    subscriberMetadata.getSubscriber().consume(topic.getMessages().get(currentOffset));
+                    subscriberMetadata.getOffset().compareAndSet(currentOffset, currentOffset + 1);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -36,8 +36,8 @@ public class SubscriberWorker implements Runnable {
     }
 
     public void wakeUpIfRequired() {
-        synchronized (topicSubscriber) {
-            topicSubscriber.notify();
+        synchronized (subscriberMetadata) {
+            subscriberMetadata.notify();
         }
     }
 }

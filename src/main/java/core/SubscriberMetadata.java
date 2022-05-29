@@ -2,12 +2,12 @@ package core;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class TopicSubscriber {
+public class SubscriberMetadata {
 
     private final AtomicInteger offset;
     private final ISubscriber subscriber;
 
-    public TopicSubscriber(ISubscriber subscriber) {
+    public SubscriberMetadata(ISubscriber subscriber) {
         this.offset = new AtomicInteger(0);
         this.subscriber = subscriber;
     }

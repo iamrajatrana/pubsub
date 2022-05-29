@@ -8,7 +8,7 @@ public class Topic {
 
     private final String name;
     private final List<Message> messages = new ArrayList<>();
-    private final List<TopicSubscriber> subscribers = new ArrayList<TopicSubscriber>();
+    private final List<SubscriberMetadata> subscribers = new ArrayList<SubscriberMetadata>();
     private ReentrantReadWriteLock messagesLock = new ReentrantReadWriteLock();
     private ReentrantReadWriteLock subscribersLock = new ReentrantReadWriteLock();
     private final TopicHandler topicHandler;
@@ -27,7 +27,7 @@ public class Topic {
         return messages;
     }
 
-    public List<TopicSubscriber> getSubscribers() {
+    public List<SubscriberMetadata> getSubscribers() {
         return subscribers;
     }
 
@@ -41,7 +41,7 @@ public class Topic {
         }
     }
 
-    public void addSubscriber(TopicSubscriber subscriber) {
+    public void addSubscriber(SubscriberMetadata subscriber) {
         try {
             subscribersLock.writeLock().lock();
             subscribers.add(subscriber);

@@ -14,12 +14,12 @@ public class TopicHandler {
     }
 
     public void publish() {
-        for(TopicSubscriber topicSubscriber: topic.getSubscribers()) {
-            startSubscriberWorker(topicSubscriber);
+        for(SubscriberMetadata subscriberMetadata : topic.getSubscribers()) {
+            startSubscriberWorker(subscriberMetadata);
         }
     }
 
-    public void startSubscriberWorker(TopicSubscriber subscriber) {
+    public void startSubscriberWorker(SubscriberMetadata subscriber) {
         String subscriberID = subscriber.getSubscriber().getID();
         if(!subscriberWorkers.containsKey(subscriberID)) {
             final SubscriberWorker subscriberWorker = new SubscriberWorker(topic, subscriber);

@@ -1,4 +1,7 @@
-package core;
+package subscribers;
+
+import core.ISubscriber;
+import core.Message;
 
 public class SleepingSubscriber implements ISubscriber {
     private final String id;
